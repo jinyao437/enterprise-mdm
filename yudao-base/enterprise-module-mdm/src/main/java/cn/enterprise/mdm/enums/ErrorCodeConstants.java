@@ -26,4 +26,12 @@ public interface ErrorCodeConstants {
 
     // ========== 合规 (1-050-500-000) ==========
     ErrorCode REPORT_NOT_EXISTS = new ErrorCode(1_050_500_000, "合规上报不存在");
+
+    // ========== 应用分发 (1-050-600-000) ==========
+    ErrorCode APP_NOT_EXISTS = new ErrorCode(1_050_600_000, "应用不存在");
+    ErrorCode APP_PACKAGE_DUPLICATE = new ErrorCode(1_050_600_001, "应用包名已存在");
+    ErrorCode APP_VERSION_NOT_EXISTS = new ErrorCode(1_050_600_002, "应用版本不存在");
+    ErrorCode APP_OFFLINE_CANNOT_DISTRIBUTE = new ErrorCode(1_050_600_003, "应用已下架，无法分发");
+    ErrorCode APP_DISTRIBUTION_NOT_EXISTS = new ErrorCode(1_050_600_004, "分发任务不存在");
+    ErrorCode APP_GRAY_PERCENT_INVALID = new ErrorCode(1_050_600_005, "灰度比例必须在 0-100 之间");
 }
