@@ -5,6 +5,7 @@ import cn.enterprise.mdm.dal.dataobject.ImNotificationLogDO;
 import cn.enterprise.mdm.dal.mysql.ImNotificationLogMapper;
 import cn.enterprise.mdm.enums.ImNotifyStatusEnum;
 import cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder;
+import cn.iocoder.yudao.framework.tenant.core.util.TenantUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -80,5 +81,29 @@ public class ImNotificationServiceImpl implements ImNotificationService {
             logMapper.updateById(update);
             return false;
         }
+    }
+
+    @Override
+    public int scanAndSendAllTenants() {
+        // 1. 忽略租户，跨租户拿到所有待发/失败可重试的通知（定时任务无 Web 请求上下文）
+        List<ImNotificationLogDO> allPending = TenantUtils.executeIgnore(() -> logMapper.selectPending());
+        if (allPending == null || allPending.isEmpty()) {
+            return 0;
+        }
+        // 2. 逐条按「该记录所属租户」包裹上下文后发送，保证租户插件注入正确 tenant_id
+        int sent = 0;
+        for (ImNotificationLogDO log : allPending) {
+            Long tenantId = log.getTenantId();
+            if (tenantId == null) {
+                // 缺租户的记录不处理（fail-closed），避免串租户
+                continue;
+            }
+            final Long id = log.getId();
+            boolean ok = TenantUtils.execute(tenantId, () -> trySend(id));
+            if (ok) {
+                sent++;
+            }
+        }
+        return sent;
     }
 }

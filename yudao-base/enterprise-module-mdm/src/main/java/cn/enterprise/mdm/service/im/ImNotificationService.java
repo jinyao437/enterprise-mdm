@@ -31,4 +31,15 @@ public interface ImNotificationService {
      * @return 是否发送成功
      */
     boolean trySend(Long notificationId);
+
+    /**
+     * 定时任务入口：跨租户扫描所有待发通知并逐条发送。
+     *
+     * <p>无 Web 请求也可能被调用，因此内部自行处理租户上下文：
+     * 先用忽略租户查询拿到全部待发记录，再按每条记录的 tenantId 用
+     * TenantUtils.execute 包裹发送，避免租户插件在无上下文时失败。
+     *
+     * @return 本次成功发送条数
+     */
+    int scanAndSendAllTenants();
 }

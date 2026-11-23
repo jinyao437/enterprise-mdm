@@ -50,4 +50,11 @@ public class ImNotificationController {
     public CommonResult<Boolean> trySend(@RequestParam("id") Long id) {
         return success(notificationService.trySend(id));
     }
+
+    @PostMapping("/scan-and-send")
+    @Operation(summary = "跨租户扫描并发送所有待发通知（定时任务入口，按租户包裹上下文）")
+    @PreAuthorize("@ss.hasPermission('mdm:im:notify')")
+    public CommonResult<Integer> scanAndSendAllTenants() {
+        return success(notificationService.scanAndSendAllTenants());
+    }
 }
