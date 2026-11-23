@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.MdmAgent" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
