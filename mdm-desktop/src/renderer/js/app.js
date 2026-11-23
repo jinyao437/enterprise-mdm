@@ -14,6 +14,23 @@ const modules = {
 let currentModule = 'messages';
 let currentItem = null;
 
+// ===== 性能常量 =====
+const VIRTUAL_THRESHOLD = 50;   // 超过该条数启用虚拟列表
+const ROW_HEIGHT = 58;          // 列表行高（与 CSS .list-item 对齐）
+const OVERSCAN = 8;             // 可视区上下预渲染行数
+const MAX_CHAT_MESSAGES = 500;  // 聊天窗口保留的最大消息数
+let currentFilteredItems = [];  // 当前过滤后的列表数据（虚拟列表用）
+let searchWorker = null;        // 搜索过滤 Worker（大数据时启用）
+
+/** 通用防抖 */
+function debounce(fn, delay) {
+  let timer = null;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', () => {
   bindWindowControls();
@@ -36,13 +53,25 @@ function bindRail() {
 
 function bindSearch() {
   const input = document.getElementById('listSearch');
-  input?.addEventListener('input', () => renderList(currentModule, input.value.trim()));
+  // 防抖 200ms：每敲一个字不再立即全量重绘
+  input?.addEventListener('input', debounce(() => renderList(currentModule, input.value.trim()), 200));
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
       document.getElementById('globalSearch')?.focus();
     }
   });
+
+  // 大数据量时启用 Worker 做过滤，避免阻塞 UI 线程
+  try {
+    searchWorker = new Worker('js/search-worker.js');
+    searchWorker.onmessage = (e) => {
+      currentFilteredItems = e.data.items;
+      renderVirtualList(currentFilteredItems);
+    };
+  } catch (_) {
+    searchWorker = null; // Worker 不可用时回退到主线程过滤
+  }
 }
 
 // ===== 模块切换 =====
@@ -57,34 +86,90 @@ function switchModule(key) {
   renderContent(mod.render(null));
 }
 
-function renderList(key, keyword) {
-  const mod = modules[key];
-  const container = document.getElementById('listItems');
-  const items = (mod.list || []).filter((it) =>
+function filterItems(list, keyword) {
+  return (list || []).filter((it) =>
     !keyword || (it.name && it.name.includes(keyword)) || (it.desc && it.desc.includes(keyword))
   );
-  if (items.length === 0) {
-    container.innerHTML = '<div class="empty" style="padding:40px 0"><div class="big">📭</div><div>暂无数据</div></div>';
+}
+
+function renderList(key, keyword) {
+  const mod = modules[key];
+  const raw = mod.list || [];
+  // 大数据量交给 Worker 过滤+渲染，避免主线程阻塞
+  if (raw.length >= VIRTUAL_THRESHOLD && searchWorker) {
+    searchWorker.postMessage({ items: raw, keyword });
     return;
   }
-  container.innerHTML = items.map((it, idx) => `
-    <div class="list-item ${idx === 0 && !currentItem ? 'active' : ''}" data-idx="${idx}">
-      <div class="list-item-avatar">${escapeHtml((it.name || '?').slice(0, 1))}</div>
-      <div class="list-item-main">
-        <div class="list-item-name">${escapeHtml(it.name || '')}</div>
-        <div class="list-item-desc">${escapeHtml(it.desc || '')}</div>
-      </div>
-      ${it.statusText ? `<span class="list-item-status ${statusClass(it.status)}">${escapeHtml(it.statusText)}</span>` : ''}
-    </div>`).join('');
-  container.querySelectorAll('.list-item').forEach((el) => {
-    el.addEventListener('click', () => {
-      container.querySelectorAll('.list-item').forEach((x) => x.classList.remove('active'));
-      el.classList.add('active');
-      const item = items[Number(el.dataset.idx)];
-      currentItem = item;
-      renderContent(modules[currentModule].render(item));
-    });
-  });
+  const items = filterItems(raw, keyword);
+  currentFilteredItems = items;
+  if (items.length === 0) {
+    document.getElementById('listItems').innerHTML =
+      '<div class="empty" style="padding:40px 0"><div class="big">📭</div><div>暂无数据</div></div>';
+    return;
+  }
+  // 超阈值（Worker 不可用回退）启用虚拟列表，否则批量插入
+  if (items.length > VIRTUAL_THRESHOLD) renderVirtualList(items);
+  else renderListBatch(items);
+}
+
+/** 小列表：DocumentFragment 批量插入，一次 reflow（替代逐条 innerHTML +=） */
+function renderListBatch(items) {
+  const container = document.getElementById('listItems');
+  const frag = document.createDocumentFragment();
+  items.forEach((it, idx) => frag.appendChild(buildItemNode(it, idx)));
+  container.replaceChildren(frag); // 一次性替换，单次重排
+  bindItemClicks(container, items);
+}
+
+/** 大列表：虚拟滚动，只渲染可视区 + 上下预渲染行 */
+function renderVirtualList(items) {
+  const container = document.getElementById('listItems');
+  const viewportH = container.clientHeight || 600;
+  const total = items.length;
+  const topSpacer = document.createElement('div');
+  const bottomSpacer = document.createElement('div');
+  const render = () => {
+    const scrollTop = container.scrollTop;
+    const start = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN);
+    const end = Math.min(total, Math.ceil((scrollTop + viewportH) / ROW_HEIGHT) + OVERSCAN);
+    const frag = document.createDocumentFragment();
+    topSpacer.style.height = (start * ROW_HEIGHT) + 'px';
+    bottomSpacer.style.height = ((total - end) * ROW_HEIGHT) + 'px';
+    frag.appendChild(topSpacer);
+    for (let i = start; i < end; i++) frag.appendChild(buildItemNode(items[i], i));
+    frag.appendChild(bottomSpacer);
+    container.replaceChildren(frag);
+    bindItemClicks(container, items);
+  };
+  container.onscroll = render; // 覆盖式绑定，避免重复监听累积
+  render();
+}
+
+/** 构造单个列表行节点 */
+function buildItemNode(it, idx) {
+  const el = document.createElement('div');
+  el.className = 'list-item' + (idx === 0 && !currentItem ? ' active' : '');
+  el.dataset.idx = idx;
+  el.innerHTML = `
+    <div class="list-item-avatar">${escapeHtml((it.name || '?').slice(0, 1))}</div>
+    <div class="list-item-main">
+      <div class="list-item-name">${escapeHtml(it.name || '')}</div>
+      <div class="list-item-desc">${escapeHtml(it.desc || '')}</div>
+    </div>
+    ${it.statusText ? `<span class="list-item-status ${statusClass(it.status)}">${escapeHtml(it.statusText)}</span>` : ''}`;
+  return el;
+}
+
+/** 绑定列表行点击（事件委托到容器，减少监听器数量） */
+function bindItemClicks(container, items) {
+  container.onclick = (e) => {
+    const row = e.target.closest('.list-item');
+    if (!row) return;
+    container.querySelectorAll('.list-item').forEach((x) => x.classList.remove('active'));
+    row.classList.add('active');
+    currentItem = items[Number(row.dataset.idx)];
+    renderContent(modules[currentModule].render(currentItem));
+  };
 }
 
 function renderContent(html) {
@@ -230,6 +315,10 @@ function bindContentActions() {
           bubble.className = 'chat-bubble right';
           bubble.textContent = input.value.trim();
           box.appendChild(bubble);
+          // 消息上限：超出后移除最早的，防止 DOM 无限增长导致内存/布局变重
+          while (box.children.length > MAX_CHAT_MESSAGES) {
+            box.removeChild(box.firstChild);
+          }
           input.value = '';
           box.scrollTop = box.scrollHeight;
         }
