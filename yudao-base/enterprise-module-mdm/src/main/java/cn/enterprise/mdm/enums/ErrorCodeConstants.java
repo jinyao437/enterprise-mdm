@@ -37,4 +37,10 @@ public interface ErrorCodeConstants {
 
     // ========== IM 通知 (1-050-700-000) ==========
     ErrorCode IM_NOTIFICATION_NOT_EXISTS = new ErrorCode(1_050_700_000, "IM 通知记录不存在");
+
+    // ========== 开放平台 (1-050-800-000) ==========
+    ErrorCode OPEN_APP_NOT_EXISTS = new ErrorCode(1_050_800_000, "开放平台应用不存在");
+    ErrorCode OPEN_APP_KEY_DUPLICATE = new ErrorCode(1_050_800_001, "appKey 已存在");
+    ErrorCode WEBHOOK_EVENT_INVALID = new ErrorCode(1_050_800_002, "订阅事件不合法");
+    ErrorCode API_QUOTA_EXCEEDED = new ErrorCode(1_050_800_003, "API 调用超出配额限制");
 }
