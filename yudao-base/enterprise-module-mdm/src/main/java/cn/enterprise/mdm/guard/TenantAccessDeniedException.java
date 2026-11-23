@@ -1,14 +1,1 @@
-package cn.enterprise.mdm.guard;
-
-/**
- * 跨租户访问拒绝异常。
- *
- * <p>当资源所属租户与当前主体租户不一致时抛出，防止越权读写其他租户数据
- * （独立评审 H-1）。
- */
-public class TenantAccessDeniedException extends RuntimeException {
-
-    public TenantAccessDeniedException(String message) {
-        super(message);
-    }
-}
+cGFja2FnZSBjbi5lbnRlcnByaXNlLm1kbS5ndWFyZDsKCi8qKgogKiDot6jnp5/miLforr/pl67mi5Lnu53lvILluLjjgIIKICoKICogPHA+5b2T6LWE5rqQ5omA5bGe56ef5oi35LiO5b2T5YmN5Li75L2T56ef5oi35LiN5LiA6Ie05pe25oqb5Ye677yM6Ziy5q2i6LaK5p2D6K+75YaZ5YW25LuW56ef5oi35pWw5o2uCiAqIO+8iOeLrOeri+ivhOWuoSBILTHvvInjgIIKICovCnB1YmxpYyBjbGFzcyBUZW5hbnRBY2Nlc3NEZW5pZWRFeGNlcHRpb24gZXh0ZW5kcyBSdW50aW1lRXhjZXB0aW9uIHsKCiAgICBwdWJsaWMgVGVuYW50QWNjZXNzRGVuaWVkRXhjZXB0aW9uKFN0cmluZyBtZXNzYWdlKSB7CiAgICAgICAgc3VwZXIobWVzc2FnZSk7CiAgICB9Cn0K

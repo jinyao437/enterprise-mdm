@@ -1,14 +1,1 @@
-package cn.enterprise.mdm.datasource;
-
-/**
- * 租户隔离模式：对应 PRD 的「逻辑隔离 / 物理隔离」。
- *
- * <p>逻辑隔离：共享库 + tenant_id 行级隔离（芋道底座原生能力，默认）。
- * 物理隔离：按租户切换独立数据源（独立库/Schema），由
- * {@link TenantDataSourceRouter} 结合 dynamic-datasource 实现。
- */
-public enum TenantIsolationMode {
-
-    LOGICAL,
-    PHYSICAL
-}
+cGFja2FnZSBjbi5lbnRlcnByaXNlLm1kbS5kYXRhc291cmNlOwoKLyoqCiAqIOenn+aIt+malOemu+aooeW8j++8muWvueW6lCBQUkQg55qE44CM6YC76L6R6ZqU56a7IC8g54mp55CG6ZqU56a744CN44CCCiAqCiAqIDxwPumAu+i+kemalOemu++8muWFseS6q+W6kyArIHRlbmFudF9pZCDooYznuqfpmpTnprvvvIjoiovpgZPlupXluqfljp/nlJ/og73lipvvvIzpu5jorqTvvInjgIIKICog54mp55CG6ZqU56a777ya5oyJ56ef5oi35YiH5o2i54us56uL5pWw5o2u5rqQ77yI54us56uL5bqTL1NjaGVtYe+8ie+8jOeUsQogKiB7QGxpbmsgVGVuYW50RGF0YVNvdXJjZVJvdXRlcn0g57uT5ZCIIGR5bmFtaWMtZGF0YXNvdXJjZSDlrp7njrDjgIIKICovCnB1YmxpYyBlbnVtIFRlbmFudElzb2xhdGlvbk1vZGUgewoKICAgIExPR0lDQUwsCiAgICBQSFlTSUNBTAp9Cg==

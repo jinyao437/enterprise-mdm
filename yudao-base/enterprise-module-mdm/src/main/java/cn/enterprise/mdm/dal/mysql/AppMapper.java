@@ -1,16 +1,1 @@
-package cn.enterprise.mdm.dal.mysql;
-
-import cn.enterprise.mdm.dal.dataobject.AppDO;
-import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
-import org.apache.ibatis.annotations.Mapper;
-
-/**
- * MDM 应用 Mapper
- */
-@Mapper
-public interface AppMapper extends BaseMapperX<AppDO> {
-
-    default AppDO selectByPackageName(String packageName) {
-        return selectOne(AppDO::getPackageName, packageName);
-    }
-}
+cGFja2FnZSBjbi5lbnRlcnByaXNlLm1kbS5kYWwubXlzcWw7CgppbXBvcnQgY24uZW50ZXJwcmlzZS5tZG0uZGFsLmRhdGFvYmplY3QuQXBwRE87CmltcG9ydCBjbi5pb2NvZGVyLnl1ZGFvLmZyYW1ld29yay5teWJhdGlzLmNvcmUubWFwcGVyLkJhc2VNYXBwZXJYOwppbXBvcnQgb3JnLmFwYWNoZS5pYmF0aXMuYW5ub3RhdGlvbnMuTWFwcGVyOwoKLyoqCiAqIE1ETSDlupTnlKggTWFwcGVyCiAqLwpATWFwcGVyCnB1YmxpYyBpbnRlcmZhY2UgQXBwTWFwcGVyIGV4dGVuZHMgQmFzZU1hcHBlclg8QXBwRE8+IHsKCiAgICBkZWZhdWx0IEFwcERPIHNlbGVjdEJ5UGFja2FnZU5hbWUoU3RyaW5nIHBhY2thZ2VOYW1lKSB7CiAgICAgICAgcmV0dXJuIHNlbGVjdE9uZShBcHBETzo6Z2V0UGFja2FnZU5hbWUsIHBhY2thZ2VOYW1lKTsKICAgIH0KfQo=

@@ -1,17 +1,1 @@
-import request from '@/config/axios'
-
-// 下发远程指令
-export const dispatchCommand = (params: {
-  deviceId: number
-  type: number
-  params?: string
-  idempotencyKey: string
-  confirmToken?: string
-}) => request.post({
-  url: '/mdm/command/dispatch?deviceId=' + params.deviceId
-    + '&type=' + params.type
-    + '&idempotencyKey=' + encodeURIComponent(params.idempotencyKey)
-    + (params.params ? '&params=' + encodeURIComponent(params.params) : '')
-    + (params.confirmToken ? '&confirmToken=' + encodeURIComponent(params.confirmToken) : '')
-})
-export const getCommand = (id: number) => request.get({ url: '/mdm/command/get?id=' + id })
+aW1wb3J0IHJlcXVlc3QgZnJvbSAnQC9jb25maWcvYXhpb3MnCgovLyDkuIvlj5Hov5znqIvmjIfku6QKZXhwb3J0IGNvbnN0IGRpc3BhdGNoQ29tbWFuZCA9IChwYXJhbXM6IHsKICBkZXZpY2VJZDogbnVtYmVyCiAgdHlwZTogbnVtYmVyCiAgcGFyYW1zPzogc3RyaW5nCiAgaWRlbXBvdGVuY3lLZXk6IHN0cmluZwogIGNvbmZpcm1Ub2tlbj86IHN0cmluZwp9KSA9PiByZXF1ZXN0LnBvc3QoewogIHVybDogJy9tZG0vY29tbWFuZC9kaXNwYXRjaD9kZXZpY2VJZD0nICsgcGFyYW1zLmRldmljZUlkCiAgICArICcmdHlwZT0nICsgcGFyYW1zLnR5cGUKICAgICsgJyZpZGVtcG90ZW5jeUtleT0nICsgZW5jb2RlVVJJQ29tcG9uZW50KHBhcmFtcy5pZGVtcG90ZW5jeUtleSkKICAgICsgKHBhcmFtcy5wYXJhbXMgPyAnJnBhcmFtcz0nICsgZW5jb2RlVVJJQ29tcG9uZW50KHBhcmFtcy5wYXJhbXMpIDogJycpCiAgICArIChwYXJhbXMuY29uZmlybVRva2VuID8gJyZjb25maXJtVG9rZW49JyArIGVuY29kZVVSSUNvbXBvbmVudChwYXJhbXMuY29uZmlybVRva2VuKSA6ICcnKQp9KQpleHBvcnQgY29uc3QgZ2V0Q29tbWFuZCA9IChpZDogbnVtYmVyKSA9PiByZXF1ZXN0LmdldCh7IHVybDogJy9tZG0vY29tbWFuZC9nZXQ/aWQ9JyArIGlkIH0pCg==

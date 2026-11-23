@@ -1,16 +1,1 @@
-package cn.enterprise.mdm.dal.mysql;
-
-import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
-import cn.enterprise.mdm.dal.dataobject.DeviceCommandDO;
-import org.apache.ibatis.annotations.Mapper;
-
-/**
- * MDM 远程指令 Mapper
- */
-@Mapper
-public interface DeviceCommandMapper extends BaseMapperX<DeviceCommandDO> {
-
-    default DeviceCommandDO selectByIdempotencyKey(String idempotencyKey) {
-        return selectOne(DeviceCommandDO::getIdempotencyKey, idempotencyKey);
-    }
-}
+cGFja2FnZSBjbi5lbnRlcnByaXNlLm1kbS5kYWwubXlzcWw7CgppbXBvcnQgY24uaW9jb2Rlci55dWRhby5mcmFtZXdvcmsubXliYXRpcy5jb3JlLm1hcHBlci5CYXNlTWFwcGVyWDsKaW1wb3J0IGNuLmVudGVycHJpc2UubWRtLmRhbC5kYXRhb2JqZWN0LkRldmljZUNvbW1hbmRETzsKaW1wb3J0IG9yZy5hcGFjaGUuaWJhdGlzLmFubm90YXRpb25zLk1hcHBlcjsKCi8qKgogKiBNRE0g6L+c56iL5oyH5LukIE1hcHBlcgogKi8KQE1hcHBlcgpwdWJsaWMgaW50ZXJmYWNlIERldmljZUNvbW1hbmRNYXBwZXIgZXh0ZW5kcyBCYXNlTWFwcGVyWDxEZXZpY2VDb21tYW5kRE8+IHsKCiAgICBkZWZhdWx0IERldmljZUNvbW1hbmRETyBzZWxlY3RCeUlkZW1wb3RlbmN5S2V5KFN0cmluZyBpZGVtcG90ZW5jeUtleSkgewogICAgICAgIHJldHVybiBzZWxlY3RPbmUoRGV2aWNlQ29tbWFuZERPOjpnZXRJZGVtcG90ZW5jeUtleSwgaWRlbXBvdGVuY3lLZXkpOwogICAgfQp9Cg==

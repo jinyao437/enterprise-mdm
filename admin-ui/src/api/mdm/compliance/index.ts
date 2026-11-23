@@ -1,17 +1,1 @@
-import request from '@/config/axios'
-
-// MDM 合规上报 VO
-export interface ComplianceVO {
-  id: number | undefined
-  deviceId: number
-  checkItem: string
-  status: number
-  detail: string
-  alerted: boolean
-  reportTime: Date
-}
-
-// MDM 合规检查 API
-export const reportCompliance = (data: ComplianceVO) => request.post({ url: '/mdm/compliance/report', data })
-export const listUnalerted = () => request.get({ url: '/mdm/compliance/unalerted' })
-export const markAlerted = (id: number) => request.put({ url: '/mdm/compliance/alerted?id=' + id })
+aW1wb3J0IHJlcXVlc3QgZnJvbSAnQC9jb25maWcvYXhpb3MnCgovLyBNRE0g5ZCI6KeE5LiK5oqlIFZPCmV4cG9ydCBpbnRlcmZhY2UgQ29tcGxpYW5jZVZPIHsKICBpZDogbnVtYmVyIHwgdW5kZWZpbmVkCiAgZGV2aWNlSWQ6IG51bWJlcgogIGNoZWNrSXRlbTogc3RyaW5nCiAgc3RhdHVzOiBudW1iZXIKICBkZXRhaWw6IHN0cmluZwogIGFsZXJ0ZWQ6IGJvb2xlYW4KICByZXBvcnRUaW1lOiBEYXRlCn0KCi8vIE1ETSDlkIjop4Tmo4Dmn6UgQVBJCmV4cG9ydCBjb25zdCByZXBvcnRDb21wbGlhbmNlID0gKGRhdGE6IENvbXBsaWFuY2VWTykgPT4gcmVxdWVzdC5wb3N0KHsgdXJsOiAnL21kbS9jb21wbGlhbmNlL3JlcG9ydCcsIGRhdGEgfSkKZXhwb3J0IGNvbnN0IGxpc3RVbmFsZXJ0ZWQgPSAoKSA9PiByZXF1ZXN0LmdldCh7IHVybDogJy9tZG0vY29tcGxpYW5jZS91bmFsZXJ0ZWQnIH0pCmV4cG9ydCBjb25zdCBtYXJrQWxlcnRlZCA9IChpZDogbnVtYmVyKSA9PiByZXF1ZXN0LnB1dCh7IHVybDogJy9tZG0vY29tcGxpYW5jZS9hbGVydGVkP2lkPScgKyBpZCB9KQo=

@@ -1,14 +1,1 @@
-package cn.enterprise.mdm.guard;
-
-/**
- * 租户上下文缺失异常。
- *
- * <p>当请求未携带有效租户标识时抛出，用于实现 fail-closed：宁可拒绝请求，
- * 也不静默回落到默认数据源，避免跨租户数据污染（独立评审 H-2）。
- */
-public class TenantContextMissingException extends RuntimeException {
-
-    public TenantContextMissingException(String message) {
-        super(message);
-    }
-}
+cGFja2FnZSBjbi5lbnRlcnByaXNlLm1kbS5ndWFyZDsKCi8qKgogKiDnp5/miLfkuIrkuIvmlofnvLrlpLHlvILluLjjgIIKICoKICogPHA+5b2T6K+35rGC5pyq5pC65bim5pyJ5pWI56ef5oi35qCH6K+G5pe25oqb5Ye677yM55So5LqO5a6e546wIGZhaWwtY2xvc2Vk77ya5a6B5Y+v5ouS57ud6K+35rGC77yMCiAqIOS5n+S4jemdmem7mOWbnuiQveWIsOm7mOiupOaVsOaNrua6kO+8jOmBv+WFjei3qOenn+aIt+aVsOaNruaxoeafk++8iOeLrOeri+ivhOWuoSBILTLvvInjgIIKICovCnB1YmxpYyBjbGFzcyBUZW5hbnRDb250ZXh0TWlzc2luZ0V4Y2VwdGlvbiBleHRlbmRzIFJ1bnRpbWVFeGNlcHRpb24gewoKICAgIHB1YmxpYyBUZW5hbnRDb250ZXh0TWlzc2luZ0V4Y2VwdGlvbihTdHJpbmcgbWVzc2FnZSkgewogICAgICAgIHN1cGVyKG1lc3NhZ2UpOwogICAgfQp9Cg==

@@ -1,14 +1,1 @@
-package cn.enterprise.mdm.dal.mysql;
-
-import cn.enterprise.mdm.dal.dataobject.DeviceTokenDO;
-import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
-import org.apache.ibatis.annotations.Mapper;
-
-/** MDM 设备令牌 Mapper */
-@Mapper
-public interface DeviceTokenMapper extends BaseMapperX<DeviceTokenDO> {
-
-    default DeviceTokenDO selectByTokenHash(String tokenHash) {
-        return selectOne(DeviceTokenDO::getTokenHash, tokenHash);
-    }
-}
+cGFja2FnZSBjbi5lbnRlcnByaXNlLm1kbS5kYWwubXlzcWw7CgppbXBvcnQgY24uZW50ZXJwcmlzZS5tZG0uZGFsLmRhdGFvYmplY3QuRGV2aWNlVG9rZW5ETzsKaW1wb3J0IGNuLmlvY29kZXIueXVkYW8uZnJhbWV3b3JrLm15YmF0aXMuY29yZS5tYXBwZXIuQmFzZU1hcHBlclg7CmltcG9ydCBvcmcuYXBhY2hlLmliYXRpcy5hbm5vdGF0aW9ucy5NYXBwZXI7CgovKiogTURNIOiuvuWkh+S7pOeJjCBNYXBwZXIgKi8KQE1hcHBlcgpwdWJsaWMgaW50ZXJmYWNlIERldmljZVRva2VuTWFwcGVyIGV4dGVuZHMgQmFzZU1hcHBlclg8RGV2aWNlVG9rZW5ETz4gewoKICAgIGRlZmF1bHQgRGV2aWNlVG9rZW5ETyBzZWxlY3RCeVRva2VuSGFzaChTdHJpbmcgdG9rZW5IYXNoKSB7CiAgICAgICAgcmV0dXJuIHNlbGVjdE9uZShEZXZpY2VUb2tlbkRPOjpnZXRUb2tlbkhhc2gsIHRva2VuSGFzaCk7CiAgICB9Cn0K

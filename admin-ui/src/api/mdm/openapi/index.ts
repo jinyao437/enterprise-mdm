@@ -1,9 +1,1 @@
-import request from '@/config/axios'
-
-// MDM 开放平台 API
-export const registerOpenApp = (data: any) => request.post({ url: '/mdm/open/app/register', data })
-export const updateOpenAppStatus = (id: number, status: number) => request.put({ url: '/mdm/open/app/status?id=' + id + '&status=' + status })
-export const setQuota = (data: any) => request.post({ url: '/mdm/open/quota', data })
-export const listQuotas = (appId: number) => request.get({ url: '/mdm/open/quota/list?appId=' + appId })
-export const subscribeWebhook = (data: any) => request.post({ url: '/mdm/open/webhook/subscribe', data })
-export const listSubscribers = (event: string) => request.get({ url: '/mdm/open/webhook/subscribers?event=' + event })
+aW1wb3J0IHJlcXVlc3QgZnJvbSAnQC9jb25maWcvYXhpb3MnCgovLyBNRE0g5byA5pS+5bmz5Y+wIEFQSQpleHBvcnQgY29uc3QgcmVnaXN0ZXJPcGVuQXBwID0gKGRhdGE6IGFueSkgPT4gcmVxdWVzdC5wb3N0KHsgdXJsOiAnL21kbS9vcGVuL2FwcC9yZWdpc3RlcicsIGRhdGEgfSkKZXhwb3J0IGNvbnN0IHVwZGF0ZU9wZW5BcHBTdGF0dXMgPSAoaWQ6IG51bWJlciwgc3RhdHVzOiBudW1iZXIpID0+IHJlcXVlc3QucHV0KHsgdXJsOiAnL21kbS9vcGVuL2FwcC9zdGF0dXM/aWQ9JyArIGlkICsgJyZzdGF0dXM9JyArIHN0YXR1cyB9KQpleHBvcnQgY29uc3Qgc2V0UXVvdGEgPSAoZGF0YTogYW55KSA9PiByZXF1ZXN0LnBvc3QoeyB1cmw6ICcvbWRtL29wZW4vcXVvdGEnLCBkYXRhIH0pCmV4cG9ydCBjb25zdCBsaXN0UXVvdGFzID0gKGFwcElkOiBudW1iZXIpID0+IHJlcXVlc3QuZ2V0KHsgdXJsOiAnL21kbS9vcGVuL3F1b3RhL2xpc3Q/YXBwSWQ9JyArIGFwcElkIH0pCmV4cG9ydCBjb25zdCBzdWJzY3JpYmVXZWJob29rID0gKGRhdGE6IGFueSkgPT4gcmVxdWVzdC5wb3N0KHsgdXJsOiAnL21kbS9vcGVuL3dlYmhvb2svc3Vic2NyaWJlJywgZGF0YSB9KQpleHBvcnQgY29uc3QgbGlzdFN1YnNjcmliZXJzID0gKGV2ZW50OiBzdHJpbmcpID0+IHJlcXVlc3QuZ2V0KHsgdXJsOiAnL21kbS9vcGVuL3dlYmhvb2svc3Vic2NyaWJlcnM/ZXZlbnQ9JyArIGV2ZW50IH0pCg==
