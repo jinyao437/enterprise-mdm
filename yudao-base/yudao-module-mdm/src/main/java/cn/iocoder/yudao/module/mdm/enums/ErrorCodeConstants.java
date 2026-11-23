@@ -16,4 +16,7 @@ public interface ErrorCodeConstants {
     ErrorCode COMMAND_NOT_EXISTS = new ErrorCode(1_050_200_000, "远程指令不存在");
     ErrorCode COMMAND_CONFIRM_TOKEN_REQUIRED = new ErrorCode(1_050_200_001, "高危指令需要二次确认令牌");
     ErrorCode COMMAND_CONFIRM_TOKEN_MISMATCH = new ErrorCode(1_050_200_002, "二次确认令牌不匹配");
+
+    // ========== 策略 (1-050-300-000) ==========
+    ErrorCode POLICY_NOT_EXISTS = new ErrorCode(1_050_300_000, "策略不存在");
 }
