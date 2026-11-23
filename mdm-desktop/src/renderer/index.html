@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>企业 MDM 工作台</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- 自绘标题栏（钉钉风格：左侧应用名+搜索，右侧窗口控制） -->
+  <header class="titlebar" id="titlebar">
+    <div class="titlebar-left">
+      <div class="app-badge">MDM</div>
+      <span class="app-title">企业协同工作台</span>
+    </div>
+    <div class="titlebar-center">
+      <div class="global-search">
+        <span class="search-icon">⌕</span>
+        <input type="text" placeholder="搜索联系人、设备、应用" id="globalSearch" />
+        <kbd>Ctrl K</kbd>
+      </div>
+    </div>
+    <div class="titlebar-right">
+      <button class="win-btn" id="winMin" title="最小化">─</button>
+      <button class="win-btn" id="winMax" title="最大化">□</button>
+      <button class="win-btn win-close" id="winClose" title="关闭">✕</button>
+    </div>
+  </header>
+
+  <!-- 主体：三栏布局 -->
+  <div class="workspace">
+    <!-- 第一栏：图标导航（钉钉左侧主导航） -->
+    <nav class="rail" id="rail">
+      <div class="rail-user" title="当前用户">
+        <div class="avatar">我</div>
+      </div>
+      <div class="rail-items">
+        <button class="rail-item active" data-module="messages" title="消息">
+          <span class="rail-icon">💬</span><span class="rail-label">消息</span>
+        </button>
+        <button class="rail-item" data-module="contacts" title="通讯录">
+          <span class="rail-icon">👥</span><span class="rail-label">通讯录</span>
+        </button>
+        <button class="rail-item" data-module="devices" title="设备管理">
+          <span class="rail-icon">📱</span><span class="rail-label">设备</span>
+        </button>
+        <button class="rail-item" data-module="apps" title="应用">
+          <span class="rail-icon">🧩</span><span class="rail-label">应用</span>
+        </button>
+        <button class="rail-item" data-module="approval" title="审批">
+          <span class="rail-icon">✅</span><span class="rail-label">审批</span>
+        </button>
+        <button class="rail-item" data-module="compliance" title="合规">
+          <span class="rail-icon">🛡️</span><span class="rail-label">合规</span>
+        </button>
+      </div>
+      <div class="rail-bottom">
+        <button class="rail-item" data-module="settings" title="设置">
+          <span class="rail-icon">⚙️</span><span class="rail-label">设置</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 第二栏：列表栏（会话/设备/应用列表，随模块切换） -->
+    <aside class="list-panel" id="listPanel">
+      <div class="list-header">
+        <span class="list-title" id="listTitle">消息</span>
+        <button class="list-add" id="listAdd" title="新增">＋</button>
+      </div>
+      <div class="list-search"><input type="text" placeholder="搜索" id="listSearch" /></div>
+      <div class="list-items" id="listItems"><!-- JS 动态渲染 --></div>
+    </aside>
+
+    <!-- 第三栏：内容区（聊天/设备详情/工作台） -->
+    <main class="content" id="content"><!-- JS 动态渲染 --></main>
+  </div>
+
+  <script src="js/api-client.js"></script>
+  <script src="js/im-client.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

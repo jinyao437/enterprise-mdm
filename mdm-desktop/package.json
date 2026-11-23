@@ -1,0 +1,37 @@
+{
+  "name": "enterprise-mdm-desktop",
+  "version": "0.1.0",
+  "description": "企业 MDM PC 桌面端 — 独立 Electron 应用，钉钉风格布局（非 Web 套壳）",
+  "main": "src/main/main.js",
+  "author": "enterprise-mdm",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.enterprise.mdm.desktop",
+    "productName": "企业 MDM 工作台",
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ]
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "electron-builder"
+    ]
+  }
+}
