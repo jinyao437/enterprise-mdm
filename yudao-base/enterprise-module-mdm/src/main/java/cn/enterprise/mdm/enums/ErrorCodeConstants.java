@@ -34,4 +34,7 @@ public interface ErrorCodeConstants {
     ErrorCode APP_OFFLINE_CANNOT_DISTRIBUTE = new ErrorCode(1_050_600_003, "应用已下架，无法分发");
     ErrorCode APP_DISTRIBUTION_NOT_EXISTS = new ErrorCode(1_050_600_004, "分发任务不存在");
     ErrorCode APP_GRAY_PERCENT_INVALID = new ErrorCode(1_050_600_005, "灰度比例必须在 0-100 之间");
+
+    // ========== IM 通知 (1-050-700-000) ==========
+    ErrorCode IM_NOTIFICATION_NOT_EXISTS = new ErrorCode(1_050_700_000, "IM 通知记录不存在");
 }
