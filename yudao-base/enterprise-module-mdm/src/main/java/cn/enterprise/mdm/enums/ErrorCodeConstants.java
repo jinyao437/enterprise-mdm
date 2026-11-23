@@ -19,4 +19,11 @@ public interface ErrorCodeConstants {
 
     // ========== 策略 (1-050-300-000) ==========
     ErrorCode POLICY_NOT_EXISTS = new ErrorCode(1_050_300_000, "策略不存在");
+
+    // ========== 分组 (1-050-400-000) ==========
+    ErrorCode GROUP_NOT_EXISTS = new ErrorCode(1_050_400_000, "设备分组不存在");
+    ErrorCode GROUP_HAS_CHILDREN = new ErrorCode(1_050_400_001, "分组下存在子分组，无法删除");
+
+    // ========== 合规 (1-050-500-000) ==========
+    ErrorCode REPORT_NOT_EXISTS = new ErrorCode(1_050_500_000, "合规上报不存在");
 }
