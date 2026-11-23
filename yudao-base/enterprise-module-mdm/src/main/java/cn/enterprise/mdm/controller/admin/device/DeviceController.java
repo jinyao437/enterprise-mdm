@@ -9,6 +9,7 @@ import cn.enterprise.mdm.controller.admin.device.vo.DeviceSaveReqVO;
 import cn.enterprise.mdm.dal.dataobject.DeviceDO;
 import cn.enterprise.mdm.enums.DeviceStatusEnum;
 import cn.enterprise.mdm.service.device.DeviceService;
+import cn.enterprise.mdm.service.device.DeviceTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,6 +35,9 @@ public class DeviceController {
 
     @Resource
     private DeviceService deviceService;
+
+    @Resource
+    private DeviceTokenService deviceTokenService;
 
     @PostMapping("/create")
     @Operation(summary = "注册设备")
@@ -86,6 +90,23 @@ public class DeviceController {
     public CommonResult<Boolean> updateDeviceStatus(@RequestParam("id") Long id,
                                                     @RequestParam("status") Integer status) {
         deviceService.updateDeviceStatus(id, status);
+        return success(true);
+    }
+
+    @PostMapping("/token/create")
+    @Operation(summary = "为设备生成访问令牌（明文仅返回一次，交给 agent 激活用）")
+    @PreAuthorize("@ss.hasPermission('mdm:device:update')")
+    public CommonResult<String> createDeviceToken(@RequestParam("id") Long id,
+                                                  @RequestParam(value = "ttlDays", defaultValue = "365") Integer ttlDays) {
+        DeviceDO device = deviceService.validateDeviceExists(id);
+        return success(deviceTokenService.createToken(id, device.getIdentifier(), ttlDays));
+    }
+
+    @PostMapping("/token/revoke")
+    @Operation(summary = "撤销设备访问令牌")
+    @PreAuthorize("@ss.hasPermission('mdm:device:update')")
+    public CommonResult<Boolean> revokeDeviceToken(@RequestParam("id") Long tokenId) {
+        deviceTokenService.revokeToken(tokenId);
         return success(true);
     }
 }

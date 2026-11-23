@@ -43,4 +43,9 @@ public interface ErrorCodeConstants {
     ErrorCode OPEN_APP_KEY_DUPLICATE = new ErrorCode(1_050_800_001, "appKey 已存在");
     ErrorCode WEBHOOK_EVENT_INVALID = new ErrorCode(1_050_800_002, "订阅事件不合法");
     ErrorCode API_QUOTA_EXCEEDED = new ErrorCode(1_050_800_003, "API 调用超出配额限制");
+
+    // ========== 设备端 API (1-050-900-000) ==========
+    ErrorCode DEVICE_TOKEN_INVALID = new ErrorCode(1_050_900_000, "设备令牌无效或已撤销");
+    ErrorCode DEVICE_TOKEN_EXPIRED = new ErrorCode(1_050_900_001, "设备令牌已过期");
+    ErrorCode DEVICE_TOKEN_NOT_FOUND = new ErrorCode(1_050_900_002, "设备令牌不存在");
 }
