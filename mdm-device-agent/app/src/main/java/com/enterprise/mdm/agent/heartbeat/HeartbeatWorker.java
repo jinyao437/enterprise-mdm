@@ -6,11 +6,18 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.enterprise.mdm.agent.api.AgentConfig;
+import com.enterprise.mdm.agent.api.OkHttpAgentApi;
+import com.enterprise.mdm.agent.owner.DeviceOwnerManager;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * 设备心跳上报：周期性把设备状态、合规信息上报给后端。
+ * 设备心跳上报：周期采集设备状态并上报后端（真实 HTTP）。
  *
- * <p>真实接入时在此调用 AgentApi 上报；后端接口见 enterprise-module-mdm 的
- * /mdm/device/status 与 /mdm/compliance/report。
+ * <p>未配置服务端时 fail-closed（返回 failure，不假装成功），
+ * 网络失败由 WorkManager 退避重试。
  */
 public class HeartbeatWorker extends Worker {
 
@@ -21,9 +28,28 @@ public class HeartbeatWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        // TODO 1. 采集设备状态（Device Owner 状态、电量、网络、已装应用等）
-        // TODO 2. 调用 AgentApi.reportHeartbeat(...) 上报到后端
-        // TODO 3. 失败返回 Result.retry() 由 WorkManager 退避重试
-        return Result.success();
+        Context ctx = getApplicationContext();
+        // 未配置服务端：不重试（重试也没用），等待用户配置
+        if (!AgentConfig.isConfigured(ctx)) {
+            return Result.failure();
+        }
+        try {
+            Map<String, Object> status = collectStatus(ctx);
+            new OkHttpAgentApi(ctx).reportHeartbeat(status);
+            return Result.success();
+        } catch (Exception e) {
+            // 网络/业务失败：返回 retry，由 WorkManager 退避重试（必达语义）
+            return Result.retry();
+        }
+    }
+
+    /** 采集设备状态（真实字段：Device Owner 状态、平台、版本、设备编号） */
+    private Map<String, Object> collectStatus(Context ctx) {
+        Map<String, Object> m = new HashMap<>();
+        m.put("deviceId", AgentConfig.deviceId(ctx));
+        m.put("platform", "android");
+        m.put("osVersion", android.os.Build.VERSION.RELEASE);
+        m.put("deviceOwner", DeviceOwnerManager.isDeviceOwner(ctx));
+        return m;
     }
 }

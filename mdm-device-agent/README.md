@@ -27,9 +27,23 @@ Android Device Owner **不能靠普通安装获得**，必须三选一：
 
 工作台（uni-app）通过原生插件发广播 `com.enterprise.mdm.agent.action.COMMAND` 到 `AgentCommandReceiver`，携带 `command`（LOCK/WIPE）与高危令牌；agent 执行原生能力。第三方 App 无 `BIND_AGENT` 权限无法调用。
 
+## 与后端对接（真实 HTTP，已实现）
+
+AgentApi 的 TODO 已替换为 OkHttp 真实实现（`api/OkHttpAgentApi.java`）：
+- `reportEnrollment` → `POST /mdm/device/create`（DeviceSaveReqVO）
+- `reportHeartbeat` → `POST /mdm/compliance/report`（心跳状态写入 detail）
+- `fetchPolicies` → `GET /mdm/policy/effective?scopeType=DEVICE&scopeId=xxx`，Gson 解析 CommonResult
+- `reportCommandResult` → 暂以合规记录承载（后端缺专用端点）
+- 自动注入 `Authorization: Bearer token` 与 `tenant-id` 头；解包芋道 `CommonResult`（code=0 成功）；网络失败重试 2 次
+- 配置（`AgentConfig`）从 SharedPreferences 读服务端/租户/token/deviceId，不硬编码；未配置 fail-closed
+- `HeartbeatWorker` 已接入真实上报：未配置返回 failure、网络失败返回 retry（WorkManager 退避）
+
+**架构缺口（如实）**：后端 `/mdm/device/*`、`/mdm/policy/effective` 带 `@PreAuthorize('mdm:*:*')`，是管理端接口，agent 复用需管理员 token——不合理。正确做法是后端补「设备端专用 API」（设备证书/激活令牌鉴权）。当前先注入 token 打通链路，待后端补齐后替换鉴权即可。生产环境 token 应改用 Keystore/EncryptedSharedPreferences 加密存储（当前为普通 SP 骨架）。
+
 ## 验证状态（如实说明）
 
-- ✅ 用便携 JDK17 + Android API stub 对全部 8 个 Java 类做 javac 编译：通过（9 class）
-- ✅ PolicyJsonParser 7 项自测：全过（密码长度/相机禁用/缺键默认/null 安全）
+- ✅ 便携 JDK17 + Android API/OkHttp/Gson stub 全量 javac 编译：通过（16 class）
+- ✅ PolicyJsonParser 7 项自测：全过
+- ✅ API 协议逻辑 7 项自测：全过（CommonResult code 判定、Authorization/tenant-id 注入、fail-closed、策略 query 拼接）
 - ❌ **无 Android SDK / Gradle / adb，未能真编译成 APK，也未在真机/模拟器运行**。要出可安装包需在装有 Android SDK 的环境执行 `./gradlew assembleRelease`。
-- 真实网络调用（AgentApi、心跳、策略拉取）为接口/TODO，需接后端后实现。
+- ❌ **未端到端联调**：无 MySQL/Redis/后端运行环境，真实 HTTP 调用只做了协议层本地验证，未连真后端。
