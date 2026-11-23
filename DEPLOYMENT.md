@@ -133,6 +133,6 @@ cd yudao-uniapp && pnpm install && pnpm dev:h5
 - **野火 IM 未部署**：消息模块需要自建野火服务端；未配置时消息发不出去，代码里是明确报错而非伪造消息。
 - **Android agent**：`mdm-device-agent/` 是原生工程，需 Android SDK 才能编译 APK，且有 OkHttp 真实调用但未连真后端跑过。Device Owner 激活需出厂预置 / QR provisioning / adb 三选一。
 - **PC 桌面端**：`mdm-desktop/` 需 GUI 环境（缺 libnss3/gtk3 时起不来）；已用 Electron 33 打包配置，未在本机启动窗口。
-- **前端 dev server**：只实测过 `pnpm build:local`（Web）和 `pnpm build:h5`（uni-app）构建通过，未启动 dev server 做浏览器端联调。
+- **前端 dev server**：`pnpm build:local`（Web）和 `pnpm build:h5`（uni-app）构建通过。本机 `pnpm dev` 启动时 Vite 8 进程进入 D 状态、无输出（容器 I/O 限制），未能起 dev server 做浏览器联调。但已验证前端 API 链路配置正确：axios `base_url = VITE_BASE_URL + VITE_API_URL = http://localhost:48080/admin-api`，MDM 页面调用 `/mdm/device/page` 拼成 `http://localhost:48080/admin-api/mdm/device/page`，实测 HTTP 200。在正常桌面环境 `pnpm dev` 应可用。
 - **租户物理隔离**：PRD 里的独立库/独立 Schema 档位未实现，当前是逻辑隔离（tenant_id 行级）+ 底座租户插件，已实测 403 防越权。
 - **本文档的数据库密码、库名**是本机实测值，部署到你自己的环境请按实际改。
