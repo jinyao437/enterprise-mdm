@@ -16,7 +16,7 @@
         <module>yudao-module-system</module>
         <module>yudao-module-infra</module>
         <!-- MDM 设备模块（企业 MDM 多租户平台增量开发） -->
-        <module>yudao-module-mdm</module>
+        <module>enterprise-module-mdm</module>
 <!--        <module>yudao-module-member</module>-->
 <!--        <module>yudao-module-bpm</module>-->
 <!--        <module>yudao-module-report</module>-->

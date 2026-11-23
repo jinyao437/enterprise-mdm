@@ -35,7 +35,7 @@
         <!-- MDM 设备管理模块（企业 MDM 多租户平台） -->
         <dependency>
             <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-module-mdm</artifactId>
+            <artifactId>enterprise-module-mdm</artifactId>
             <version>${revision}</version>
         </dependency>
 

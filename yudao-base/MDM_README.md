@@ -20,7 +20,7 @@
 
 ## MDM 增量模块
 
-`yudao-module-mdm`：只实现芋道底座没有的设备管理领域能力。
+`enterprise-module-mdm`：只实现芋道底座没有的设备管理领域能力。
 
 - `DeviceDO`（设备，继承 `TenantBaseDO`）、`DeviceStatusEnum`（注册/使用/挂失/停用/报废生命周期）
 - `DeviceMapper` / `DeviceService` / `DeviceController`：设备注册、更新、删除、分页、状态变更
@@ -33,24 +33,24 @@
 git clone https://gitee.com/zhijiantianya/ruoyi-vue-pro.git
 cd ruoyi-vue-pro
 
-# 2. 将本仓库 yudao-module-mdm 目录拷入底座根目录
+# 2. 将本仓库 enterprise-module-mdm 目录拷入底座根目录
 
 # 3. 根 pom.xml <modules> 增加：
-#    <module>yudao-module-mdm</module>
-#    yudao-server/pom.xml 增加 yudao-module-mdm 依赖
+#    <module>enterprise-module-mdm</module>
+#    yudao-server/pom.xml 增加 enterprise-module-mdm 依赖
 
 # 4. 编译（JDK17 + Maven3.9）
-mvn -pl yudao-module-mdm -am -DskipTests compile
+mvn -pl enterprise-module-mdm -am -DskipTests compile
 
-# 5. 执行 SQL：yudao-module-mdm/src/test/java/.../sql/mdm_device.sql
+# 5. 执行 SQL：enterprise-module-mdm/src/test/java/.../sql/mdm_device.sql
 
 # 6. 跑单测
-mvn -pl yudao-module-mdm -am -Dtest=DeviceDOTest -Dsurefire.failIfNoSpecifiedTests=false test
+mvn -pl enterprise-module-mdm -am -Dtest=DeviceDOTest -Dsurefire.failIfNoSpecifiedTests=false test
 ```
 
 ## 验证状态
 
-- `mvn -pl yudao-module-mdm -am -DskipTests compile`：通过，11 个 class
+- `mvn -pl enterprise-module-mdm -am -DskipTests compile`：通过，11 个 class
 - `mvn -pl yudao-server -am -DskipTests compile`：通过（模块已接入应用）
 - `DeviceDOTest`：3 个测试全部通过（验证 DO 继承底座租户基类、状态枚举）
 
